@@ -11,16 +11,17 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
+
 from reviews.models import Category, Genre, Review, Title, User
 
+from .filters import TitlesFilter
 from .mixins import ListCreateDestroyViewSet
 from .permissions import IsAdminOrMe, IsAdminOrReadOnly, IsAuthorOrReadOnly
-from .serializers import (
-    AuthSerializer, CategorySerializer, CommentSerializer,
-    GenreSerializer, GetTokenSerializer, ReadOnlyTitleSerializer,
-    ReviewSerializer, TitleSerializer, UserMyselfSerializer, UserSerializer,
-)
-from .filters import TitlesFilter
+from .serializers import (AuthSerializer, CategorySerializer,
+                          CommentSerializer, GenreSerializer,
+                          GetTokenSerializer, ReadOnlyTitleSerializer,
+                          ReviewSerializer, TitleSerializer,
+                          UserMyselfSerializer, UserSerializer)
 
 
 class CategoryViewSet(ListCreateDestroyViewSet):
@@ -142,8 +143,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
     def get_title(self):
         title_id = self.kwargs.get('title_id')
-        title = get_object_or_404(Title, pk=title_id)
-        return title
+        return get_object_or_404(Title, pk=title_id)
 
     def perform_create(self, serializer):
         title = self.get_title()
@@ -151,8 +151,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         title = self.get_title()
-        reviews_queryset = title.reviews.all()
-        return reviews_queryset
+        return title.reviews.all()
 
 
 class CommentViewSet(viewsets.ModelViewSet):
@@ -164,8 +163,7 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def get_review(self):
         review_id = self.kwargs.get('review_id')
-        review = get_object_or_404(Review, pk=review_id)
-        return review
+        return get_object_or_404(Review, pk=review_id)
 
     def perform_create(self, serializer):
         review = self.get_review()
@@ -173,5 +171,4 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         review = self.get_review()
-        comments_queryset = review.comments.all()
-        return comments_queryset
+        return review.comments.all()
