@@ -23,10 +23,7 @@ jobs:
     - name: Test with flake8 and django tests
       run: |
         python -m flake8
-        # перейти в папку, содержащую manage.py —
-        #<корневая_папка_infra_actions>/<папка_проекта>/manage.py
         cd api_yamdb/
-        # запустить написанные разработчиком тесты
         python manage.py test
   build_and_push_to_docker_hub:
     name: Push Docker image to Docker Hub
@@ -47,7 +44,7 @@ jobs:
       with:
         context: api_yamdb
         push: true
-        tags: mdotsev/web_yamdb:latest
+        tags: ${{ secrets.DOCKER_USERNAME }}/web_yamdb:latest
   deploy:
     runs-on: ubuntu-latest
     needs: build_and_push_to_docker_hub
